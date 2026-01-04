@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - ImmoGestion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-blue-600">ImmoGestion</h1>
+            <p class="text-gray-500">Accès Administration</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Identifiant</label>
+                <input type="text" id="username" required 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                <input type="password" id="password" required 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div id="errorMessage" class="text-red-500 text-sm hidden">
+                Identifiants incorrects. Veuillez réessayer.
+            </div>
+
+            <button type="submit" 
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                Se connecter
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+
+            // Vérification statique selon le cahier des charges (admin/admin)
+            if (user === 'admin' && pass === 'admin') {
+                // Redirection vers le dashboard
+                window.location.href = 'index.html'; 
+            } else {
+                // Affichage de l'erreur
+                errorMsg.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
