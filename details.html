@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail du Bien - ImmoGestion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start">
+                    <span class="self-center text-xl font-bold sm:text-2xl whitespace-nowrap text-blue-600">ImmoGestion</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="biens.html" class="text-blue-600 hover:underline">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="p-4 sm:ml-0">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg mt-14 max-w-xl mx-auto bg-white shadow">
+            <h2 class="text-2xl font-bold mb-4 text-blue-600">Détail du Bien</h2>
+            <div id="bienDetail" class="space-y-3">
+                <!-- Détail JS -->
+            </div>
+            <div class="flex justify-end mt-6">
+                <button id="exportPdfBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center"><i class="fa-solid fa-file-pdf mr-2"></i>Exporter PDF</button>
+            </div>
+        </div>
+    </div>
+    <script>
+    // Récupère l'ID du bien depuis l'URL
+    function getBienIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return parseInt(params.get('id'), 10);
+    }
+    // Simule les mêmes données que biens.js
+    const biens = [
+        { id: 1, titre: "Appartement Centre Ville", type: "Appartement", prix: 1200000, adresse: "12 Rue des Fleurs, Casablanca", statut: "Disponible" },
+        { id: 2, titre: "Villa Bord de Mer", type: "Villa", prix: 4500000, adresse: "Route d'Azemmour, Casablanca", statut: "Vendu" },
+        { id: 3, titre: "Maison Familiale", type: "Maison", prix: 1800000, adresse: "5 Lotissement Al Amal, Rabat", statut: "Disponible" },
+        { id: 4, titre: "Bureau Plateau", type: "Bureau", prix: 900000, adresse: "Avenue Hassan II, Casablanca", statut: "Loué" },
+        { id: 5, titre: "Appartement Moderne", type: "Appartement", prix: 1350000, adresse: "Quartier Gauthier, Casablanca", statut: "Disponible" },
+        { id: 6, titre: "Villa avec Piscine", type: "Villa", prix: 5200000, adresse: "Anfa Supérieur, Casablanca", statut: "Disponible" },
+        { id: 7, titre: "Maison Traditionnelle", type: "Maison", prix: 1600000, adresse: "Ancienne Médina, Fès", statut: "Loué" },
+        { id: 8, titre: "Bureau Open Space", type: "Bureau", prix: 1100000, adresse: "Technopark, Casablanca", statut: "Disponible" },
+        { id: 9, titre: "Appartement Vue Mer", type: "Appartement", prix: 2000000, adresse: "Corniche, Agadir", statut: "Vendu" },
+        { id: 10, titre: "Villa Golf", type: "Villa", prix: 6000000, adresse: "Golf City, Marrakech", statut: "Disponible" }
+    ];
+    const bienId = getBienIdFromUrl();
+    const bien = biens.find(b => b.id === bienId);
+    const bienDetail = document.getElementById('bienDetail');
+    if (bien) {
+        bienDetail.innerHTML = `
+            <div><span class="font-semibold">ID :</span> ${bien.id}</div>
+            <div><span class="font-semibold">Titre :</span> ${bien.titre}</div>
+            <div><span class="font-semibold">Type :</span> ${bien.type}</div>
+            <div><span class="font-semibold">Prix :</span> ${bien.prix.toLocaleString()} DH</div>
+            <div><span class="font-semibold">Adresse :</span> ${bien.adresse}</div>
+            <div><span class="font-semibold">Statut :</span> ${bien.statut}</div>
+        `;
+    } else {
+        bienDetail.innerHTML = '<div class="text-red-500">Bien introuvable.</div>';
+        document.getElementById('exportPdfBtn').style.display = 'none';
+    }
+    document.getElementById('exportPdfBtn').addEventListener('click', () => {
+        if (!bien) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text('Fiche du Bien Immobilier', 14, 20);
+        doc.setFontSize(12);
+        doc.text(`ID : ${bien.id}`, 14, 35);
+        doc.text(`Titre : ${bien.titre}`, 14, 45);
+        doc.text(`Type : ${bien.type}`, 14, 55);
+        doc.text(`Prix : ${bien.prix.toLocaleString()} DH`, 14, 65);
+        doc.text(`Adresse : ${bien.adresse}`, 14, 75);
+        doc.text(`Statut : ${bien.statut}`, 14, 85);
+        doc.save(`bien_${bien.id}.pdf`);
+    });
+    </script>
+</body>
+</html>
